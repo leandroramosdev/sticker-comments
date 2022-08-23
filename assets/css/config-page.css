@@ -1,0 +1,37 @@
+.hide {display: none;}
+.alert {padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; }
+.alert.alert-info{color: #31708f; background-color: #d9edf7; border-color: #bce8f1;}
+.alert .close{float: right; cursor: pointer; font-size: 21px; font-weight: 700; line-height: 1; color: #000; text-shadow: 0 1px 0 #fff; filter: alpha(opacity=20); opacity: .2;}
+
+.config-page .stickers-list {
+    width: 98%;
+    height: 200px;
+    margin: 16px 0px;
+    display: block;
+    font-size: 14px;
+    border: 1px solid #CCCCCC;
+    background-color: #FFFFFF;
+    padding: 8px;
+    display: flex;
+    overflow: auto;
+}
+
+.config-page .stickers-list .sticker-item-list { 
+    margin-right: 12px;
+}
+
+.config-page .stickers-list .sticker-item-list img {
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+}
+
+.config-page .stickers-list .sticker-item-list .dashicons-trash{
+    font-size: 20px;
+    background-color: #ecf0f1;
+    padding: 2px;
+    border-radius: 20px;
+    position: absolute;
+    cursor: pointer;
+    margin: 2px;
+}
