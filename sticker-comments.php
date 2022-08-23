@@ -26,7 +26,6 @@ if(!class_exists('StickerComments')){
             wp_register_script('emojionarea', plugin_dir_url( __FILE__ ). 'assets/js/emojionearea.js' , false, null, true);
             wp_enqueue_script('emojionarea');
 
-            delete_option('stickers_list');
             $stickers = get_option('stickers_list') ? get_option('stickers_list') : [];
 
             $script_values = [
