@@ -10,36 +10,52 @@ function uploadSticker(name){
         return;
     }
 
-    media_frame = wp.media({
-        title: 'Select uma imagem para fazer upload',
-        button: {
-          text: 'Usar essa imagem',
-        },
-        library: {
-            type: 'image',
-        },
-        multiple: false,
-        
-    });
+    if(typeof wp.media !== 'function'){
+        media_frame = wp.media({
+            title: 'Select uma imagem para fazer upload',
+            button: {
+            text: 'Usar essa imagem',
+            },
+            library: {
+                type: 'image',
+            },
+            multiple: false,
+            
+        });
 
-    media_frame.on( 'select', function() {
-        let id = new Date().getTime();
-        var media = media_frame.state().get('selection').first().changed.url;
+        media_frame.on( 'select', function() {
+            var media = media_frame.state().get('selection').first().changed.url;
+            let image = $("<img src="+media+" />");
+            addImage(image);
+        });
 
-        let sticker_area = $("<span id='sticker-"+id+"' class='sticker-item-list'></span>");
-        let sticker_delete_icon = $("<span class='dashicons dashicons-trash' onclick='deleteSticker("+id+")'></span>");
-        let sticker_image = $("<img src="+media+" />");
-        sticker_area.append(sticker_delete_icon);
-        sticker_area.append(sticker_image);
+        media_frame.open();
+    } else {
+        tb_show("", "media-upload.php?type=image&amp;TB_iframe=true");
+        return false;
+    }
+}
 
-        $('.stickers-list').append(sticker_area)
-        if(script_values.stickers == null) {
-            script_values.stickers = {}; 
-        }
-        script_values.stickers[id] = media;
-    });
+window.send_to_editor = function(image) {
+    addImage(image);
+    tb_remove();
+}
 
-    media_frame.open();
+function addImage(image){
+    let id = new Date().getTime();
+
+    let sticker_area = $("<span id='sticker-"+id+"' class='sticker-item-list'></span>");
+    let sticker_delete_icon = $("<span class='dashicons dashicons-trash' onclick='deleteSticker("+id+")'></span>");
+    let sticker_image = $(image);
+    sticker_area.append(sticker_delete_icon);
+    sticker_area.append(sticker_image);
+
+    $('.stickers-list').append(sticker_area)
+    if(script_values.stickers == null) {
+        script_values.stickers = {}; 
+    }
+
+    script_values.stickers[id] = $(sticker_image).attr('src');
 }
 
 function saveStickerList(siteUrl){    
@@ -56,5 +72,5 @@ function deleteSticker(id){
 }
 
 function closeAlert(){
-    $(".alert").fadeOut(400);
+    $(".alert").fadeIn(400);
 }

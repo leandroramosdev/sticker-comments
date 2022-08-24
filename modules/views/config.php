@@ -4,7 +4,7 @@
 ?>
 
 <section class="config-page">
-    <div class="alert alert-info page-alert hide">
+    <div class="alert alert-info page-alert" style="display: none;">
         <span class="dashicons close dashicons-no-alt" onclick="closeAlert()"></span>
         <span class="message">Salvo com sucesso!</span> 
     </div>
