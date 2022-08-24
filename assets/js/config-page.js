@@ -10,7 +10,7 @@ function uploadSticker(name){
         return;
     }
 
-    if(typeof wp.media !== 'function'){
+    if(typeof wp.media == 'function'){
         media_frame = wp.media({
             title: 'Select uma imagem para fazer upload',
             button: {
