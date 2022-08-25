@@ -30,15 +30,7 @@ function uploadSticker(name){
         });
 
         media_frame.open();
-    } else {
-        tb_show("", "media-upload.php?type=image&amp;TB_iframe=true");
-        return false;
-    }
-}
-
-window.send_to_editor = function(image) {
-    addImage(image);
-    tb_remove();
+    } 
 }
 
 function addImage(image){
@@ -62,6 +54,9 @@ function saveStickerList(siteUrl){
     if(script_values.stickers != null){
         $.post(siteUrl + '/wp-json/sc/v1/save_stickers', script_values, function(response){
             $(".alert-info").fadeIn(400);
+            setTimeout(function(){
+                $(".alert").fadeOut(400);
+            }, 3000)
         })
     }
 }
@@ -72,5 +67,5 @@ function deleteSticker(id){
 }
 
 function closeAlert(){
-    $(".alert").fadeIn(400);
+    $(".alert").fadeOut(400);
 }

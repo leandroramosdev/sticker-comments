@@ -49,6 +49,14 @@ if(!class_exists('StickerComments')){
             wp_localize_script( 'config-page', 'script_values', $script_values);
 
             wp_enqueue_style( 'config-page', plugin_dir_url( __FILE__ ). 'assets/css/config-page.css' );    
+
+            wp_enqueue_media();
+            wp_enqueue_script( 'media-grid' );
+            wp_enqueue_script( 'media' );
+            
+            wp_enqueue_script('media-upload');
+            wp_enqueue_script('thickbox');
+            wp_enqueue_style('thickbox');
         }
 
         public function modules(){
