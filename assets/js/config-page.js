@@ -69,3 +69,16 @@ function deleteSticker(id){
 function closeAlert(){
     $(".alert").fadeOut(400);
 }
+
+function editCategory(category){
+    let icon = $("#category-" + category).find(".dashicons");
+
+    if($(icon).hasClass("dashicons-remove")){
+        script_values.categories_removed.push(category)
+        $(icon).removeClass("dashicons-remove").addClass("dashicons-plus-alt");
+    } else {
+        let index = script_values.categories_removed.indexOf(category);
+        script_values.categories_removed.splice(index, 1);
+        $(icon).removeClass("dashicons-plus-alt").addClass("dashicons-remove");
+    }
+}

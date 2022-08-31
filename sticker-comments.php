@@ -27,10 +27,12 @@ if(!class_exists('StickerComments')){
             wp_enqueue_script('emojionarea');
 
             $stickers = get_option('stickers_list') ? get_option('stickers_list') : [];
+            $categories_removed = get_option('categories_removed') ? get_option('categories_removed') : [];
 
             $script_values = [
                 'site_url' => get_site_url(), 
-                'stickers' => $stickers
+                'stickers' => $stickers,
+                'categories_removed' => $categories_removed
             ];
             wp_localize_script( 'emojionarea', 'script_values', $script_values);
 
@@ -45,7 +47,9 @@ if(!class_exists('StickerComments')){
             wp_enqueue_script('config-page');
 
             $stickers = get_option('stickers_list') ? get_option('stickers_list') : null;
-            $script_values = ['stickers' => $stickers];
+            $categories_removed = get_option('categories_removed') ? get_option('categories_removed') : [];
+
+            $script_values = ['stickers' => $stickers, 'categories_removed' => $categories_removed];
             wp_localize_script( 'config-page', 'script_values', $script_values);
 
             wp_enqueue_style( 'config-page', plugin_dir_url( __FILE__ ). 'assets/css/config-page.css' );    

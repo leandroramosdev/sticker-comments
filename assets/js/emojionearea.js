@@ -270,7 +270,7 @@ document = window.document || {};
 
                 smileys_people: {
                     icon: "smile",
-                    title: "Smileys & People",
+                    title: "Pessoas",
                     emoji: "grinning smiley smile grin laughing sweat_smile joy rofl relaxed blush innocent slight_smile upside_down " +
                     "wink relieved crazy_face star_struck heart_eyes kissing_heart kissing kissing_smiling_eyes kissing_closed_eyes yum " +
                     "stuck_out_tongue_winking_eye stuck_out_tongue_closed_eyes stuck_out_tongue money_mouth hugging nerd sunglasses " +
@@ -311,7 +311,7 @@ document = window.document || {};
 
                 animals_nature: {
                     icon: "hamster",
-                    title: "Animals & Nature",
+                    title: "Animais e Natureza",
                     emoji: "dog cat mouse hamster rabbit bear panda_face koala tiger lion_face cow pig pig_nose frog " +
                     "octopus monkey_face see_no_evil hear_no_evil speak_no_evil monkey chicken penguin bird baby_chick " +
                     "hatching_chick hatched_chick wolf boar horse unicorn bee bug snail beetle ant spider scorpion crab " +
@@ -331,7 +331,7 @@ document = window.document || {};
 
                 food_drink: {
                     icon: "pizza",
-                    title: "Food & Drink",
+                    title: "Comida e drinques",
                     emoji: "green_apple apple pear tangerine lemon banana watermelon grapes strawberry melon cherries peach " +
                     "pineapple tomato eggplant hot_pepper corn sweet_potato honey_pot bread cheese poultry_leg meat_on_bone " +
                     "fried_shrimp egg hamburger fries hotdog pizza spaghetti taco burrito ramen stew fish_cake sushi bento " +
@@ -342,7 +342,7 @@ document = window.document || {};
 
                 activity: {
                     icon: "basketball",
-                    title: "Activity",
+                    title: "Atividade",
                     emoji: "soccer basketball football baseball tennis volleyball rugby_football 8ball golf golfer ping_pong " +
                     "badminton hockey field_hockey cricket ski skier snowboarder ice_skate bow_and_arrow fishing_pole_and_fish " +
                     "rowboat swimmer surfer bath basketball_player lifter bicyclist mountain_bicyclist horse_racing levitate " +
@@ -353,7 +353,7 @@ document = window.document || {};
 
                 travel_places: {
                     icon: "rocket",
-                    title: "Travel & Places",
+                    title: "Viagem e Lugares",
                     emoji: "red_car taxi blue_car bus trolleybus race_car police_car ambulance fire_engine minibus truck " +
                     "articulated_lorry tractor motorcycle bike rotating_light oncoming_police_car oncoming_bus " +
                     "oncoming_automobile oncoming_taxi aerial_tramway mountain_cableway suspension_railway railway_car " +
@@ -371,7 +371,7 @@ document = window.document || {};
 
                 objects: {
                     icon: "bulb",
-                    title: "Objects",
+                    title: "Objetos",
                     emoji: "watch iphone calling computer keyboard desktop printer mouse_three_button trackball joystick " +
                     "compression minidisc floppy_disk cd dvd vhs camera camera_with_flash video_camera movie_camera projector " +
                     "film_frames telephone_receiver telephone pager fax tv radio microphone2 level_slider control_knobs " +
@@ -394,7 +394,7 @@ document = window.document || {};
 
                 symbols: {
                     icon: "heartpulse",
-                    title: "Symbols",
+                    title: "Simbolos",
                     emoji: "heart yellow_heart green_heart blue_heart purple_heart broken_heart heart_exclamation two_hearts " +
                     "revolving_hearts heartbeat heartpulse sparkling_heart cupid gift_heart heart_decoration peace cross " +
                     "star_and_crescent om_symbol wheel_of_dharma star_of_david six_pointed_star menorah yin_yang orthodox_cross " +
@@ -427,7 +427,7 @@ document = window.document || {};
 
                 flags: {
                     icon: "flag_gb",
-                    title: "Flags",
+                    title: "Bandeiras",
                     emoji: "ac af al dz ad ao ai ag ar am aw au at az bs bh bd bb by be bz bj bm bt bo ba bw br bn bg bf bi " +
                     "cv kh cm ca ky cf td flag_cl cn co km cg flag_cd cr hr cu cy cz dk dj dm do ec eg sv gq er ee et fk fo " +
                     "fj fi fr pf ga gm ge de gh gi gr gl gd gu gt gn gw gy ht hn hk hu is in flag_id ir iq ie il it ci jm jp " +
@@ -785,7 +785,7 @@ document = window.document || {};
             if (filter === 'recent' && !self.recentEmojis) {
                 return;
             }
-            if (filter !== 'tones') {
+            if (filter !== 'tones' && script_values.categories_removed.includes(filter) == false) {
                 $("<i/>", {
                     "class": selector("filter", true) + " " + selector("filter-" + filter, true),
                     "data-filter": filter,
@@ -829,24 +829,26 @@ document = window.document || {};
                     arr = Object.values(script_values.stickers);
                 } 
 
-                if(filter === 'stickers'){
-                    items = '';
-                    if(arr.length > 0){
-                        arr.map((item) => {
-                            items = items + '<i class="emojibtn" role="button" data-name=":smile:" title="Smile"><img class="emojioneemoji lazy-emoji" data-src="'+`${script_values.site_url + item}`+'"/></i>'
-                        })
+                if(script_values.categories_removed.includes(filter) == false){
+                    if(filter === 'stickers'){
+                        items = '';
+                        if(arr.length > 0){
+                            arr.map((item) => {
+                                items = items + '<i class="emojibtn" role="button" data-name=":smile:" title="Smile"><img class="emojioneemoji lazy-emoji" data-src="'+`${script_values.site_url + item}`+'"/></i>'
+                            })
+                        }
+                    } else {
+                        items = params.emoji.replace(/[\s,;]+/g, '|');
+                        items = shortnameTo(items,
+                            self.sprite ?
+                                '<i class="emojibtn" role="button" data-name="{name}" title="{friendlyName}"><i class="emojione-{uni}"></i></i>' :
+                                '<i class="emojibtn" role="button" data-name="{name}" title="{friendlyName}"><img class="emojioneemoji lazy-emoji" data-src="{img}"/></i>',
+                            true).split('|').join('');
                     }
-                } else {
-                    items = params.emoji.replace(/[\s,;]+/g, '|');
-                    items = shortnameTo(items,
-                        self.sprite ?
-                            '<i class="emojibtn" role="button" data-name="{name}" title="{friendlyName}"><i class="emojione-{uni}"></i></i>' :
-                            '<i class="emojibtn" role="button" data-name="{name}" title="{friendlyName}"><img class="emojioneemoji lazy-emoji" data-src="{img}"/></i>',
-                        true).split('|').join('');
+
+                    category.html(items);
+                    $('<div class="emojionearea-category-title"/>').text(params.title).prependTo(category);
                 }
-                
-                category.html(items);
-                $('<div class="emojionearea-category-title"/>').text(params.title).prependTo(category);
 
             } while (--skin > 0);
         });
