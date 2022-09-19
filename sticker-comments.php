@@ -8,6 +8,10 @@
  *
  */
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 if(!class_exists('StickerComments')){
     class StickerComments {
         
@@ -28,11 +32,13 @@ if(!class_exists('StickerComments')){
 
             $stickers = get_option('stickers_list') ? get_option('stickers_list') : [];
             $categories_removed = get_option('categories_removed') ? get_option('categories_removed') : [];
+            $users = $this->get_users_by_email();
 
             $script_values = [
                 'site_url' => get_site_url(), 
                 'stickers' => $stickers,
-                'categories_removed' => $categories_removed
+                'categories_removed' => $categories_removed,
+                'users' => $users
             ];
             wp_localize_script( 'emojionarea', 'script_values', $script_values);
 
@@ -66,6 +72,17 @@ if(!class_exists('StickerComments')){
         public function modules(){
             require_once 'modules/rest-api.php';
             require_once 'modules/config-page.php';
+        }
+
+        public function get_users_by_email(){
+            $all_users = get_users();
+            $users = [];
+
+            foreach($all_users as $user){
+                $users[$user->user_nicename] = $user->data->user_email;
+            }
+
+            return $users;
         }
     }
 
