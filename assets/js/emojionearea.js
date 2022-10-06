@@ -1705,7 +1705,7 @@ document = window.document || {};
         if(string.charAt(0) === '@'){
           html = html.replace(string, new_email);
           $('.emojionearea-editor').html(html);
-          $('textarea#comment').html(html);
+          $('textarea#comment, #buddypress #whats-new-form textarea').html(html);
         }
       });
       $('.find-user-list').remove();
