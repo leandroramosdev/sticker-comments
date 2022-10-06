@@ -16,5 +16,12 @@ add_action('rest_api_init', function () {
         'methods' => 'GET',
         'callback' => 'rest_endpoint_get_stickers'
     ));
+
+    register_rest_route('sc/v1', '/find_users', array(
+        'methods' => 'POST',
+        'callback' => 'rest_endpoint_find_users'
+    ));
+
+    
 });
 

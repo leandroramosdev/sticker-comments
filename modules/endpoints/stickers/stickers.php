@@ -38,3 +38,26 @@ if (!function_exists('rest_endpoint_save_stickers')) {
         ]);
     }
 }
+
+if (!function_exists('rest_endpoint_find_users')) {
+    function rest_endpoint_find_users(WP_REST_Request $request){
+        global $wpdb;
+        $params = $request->get_params();
+        $term = $params['term'];
+        $results = [];
+
+        $sql = "SELECT * FROM wp_users as user WHERE user.user_email LIKE '%$term%'";
+        $users = $wpdb->get_results($sql, ARRAY_A);
+
+        foreach($users as $user) {
+            $results[] = [
+                'name'   => $user['user_login'],
+                'email'  => $user['user_email'],
+                'slug'   => $user['user_nicename'],
+                'avatar' => get_avatar_url($user['ID'], ['size' => 120])
+            ];
+        }
+        
+        return rest_ensure_response($results);
+    }
+}

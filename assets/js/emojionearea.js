@@ -1278,11 +1278,8 @@ document = window.document || {};
 
       .on("@change", function () {
         var html = self.editor.html().replace(/<\/?(?:div|span|p)[^>]*>/gi, "");
-        self.editor.html(replaceEmailUrlUser(html));
-
-        // html =
-        //   "<a href='https://google.com' target='_blank'>leandroramos.crz@gmail.com</a>";
-
+        // self.editor.html(findUsersByTerm(html));
+        console.log('mudou')
         // clear input: chrome adds <br> when contenteditable is empty
         if (!html.length || /^<br[^>]*>$/i.test(html)) {
           self.editor.html((self.content = ""));
@@ -1319,6 +1316,8 @@ document = window.document || {};
           self.search.val("");
           self.trigger("search.keypress", true);
         }
+
+        //$('.find-user-list').remove();
       });
 
     if (options.search) {
@@ -1422,6 +1421,9 @@ document = window.document || {};
             }
           }
         }
+
+        let html = self.editor.html();
+        findUsersByTerm(html);
       });
     }
 
@@ -1636,22 +1638,80 @@ document = window.document || {};
     });
   }
 
-  function replaceEmailUrlUser(html) {
+  function findUsersByTerm(html) {
     if (typeof script_values != "undefined") {
       if (typeof script_values.users != "undefined") {
-        let emails = Object.values(script_values.users);
-        let users = Object.keys(script_values.users);
 
-        $(emails).each((key, email) => {
-          let link_user = `<a href="${script_values.site_url}/author/${users[key]}" target="_blank">${email}</a>`;
-          console.log(link_user);
-          html = html.replace(email, link_user);
+        html = html.replace(/(<([^>]+)>)/gi, "");
+        html = html.replace(/&nbsp;/gi, " ");
+        
+        let strings = html.split(' ');
+        console.log(strings)
+        
+        $(strings).map((key, string) => {
+          if(string.charAt(0) === '@' && string.length >= 2){
+            let term = string.replace('@', '');
+
+            $.post(`${script_values.site_url}/wp-json/sc/v1/find_users`, {term: term}).then((response) => {
+              if(response.length > 0){
+                $('.find-user-list').remove();
+                mountResultsFindedUsers(response, string)
+              }
+            })
+          }
         });
       }
 
       return html;
     }
   }
+
+  function mountResultsFindedUsers(data, string){
+    if($('.find-user-list').length == 0){
+      let list = $("<div class='find-user-list'></div>")
+
+      $(data).map(( key, user ) => {
+        let user_item = $(`<div class='user' data-name="${user.name}" data-email="${user.email}" data-slug="${user.slug}" >
+          <div class='avatar'>
+            <img src="${user.avatar}"/>
+          </div>
+          <div class='info'>
+            <span class='name'>${user.name}</span>
+            <span class='email'>${user.email}</span>
+          </div>
+        </div>`);
+
+        $(list).append(user_item);
+      })
+
+      $(".comment-form-comment").after(list)
+    }
+  }
+
+  $( "html" ).delegate( ".find-user-list .user", "click", function() {
+    let html          = $('.emojionearea-editor').html();
+    let name          = $(this).attr("data-name");
+    let email         = $(this).attr("data-email");
+    let slug          = $(this).attr("data-slug");
+
+    let link_user = `${script_values.site_url}/author/${name}`
+    let new_email = `<a href="${link_user}" target="_blank">${email}</a>`;
+
+    let stiped_html = html.replace(/(<([^>]+)>)/gi, "");
+    stiped_html = stiped_html.replace(/&nbsp;/gi, " ");
+
+    let strings = stiped_html.split(' ');
+      $(strings).map((key, string) => {
+        if(string.charAt(0) === '@'){
+          html = html.replace(string, new_email);
+          $('.emojionearea-editor').html(html);
+          $('textarea#comment').html(html);
+        }
+      });
+      $('.find-user-list').remove();
+  });
+
+
   var EmojioneArea = function (element, options) {
     var self = this;
     loadEmojione(options);

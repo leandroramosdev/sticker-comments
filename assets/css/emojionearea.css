@@ -564,3 +564,31 @@
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMAQMAAABsu86kAAAABlBMVEUAAAC/v79T5hyIAAAAAXRSTlMAQObYZgAAABNJREFUCNdjYGNgQEb/P4AQqiAASiUEG6Vit44AAAAASUVORK5CYII=') !important; }
 
 /*# sourceMappingURL=emojionearea.css.map */
+
+.find-user-list {
+  margin-top: -20px;
+  height: 60px;
+  position: absolute;
+  background-color: #ecf0f1;
+  border-radius: 0px 0px 4px 4px;
+  width: 47%;
+  z-index: 100;
+  overflow: auto;
+  padding: 8px;
+  height: 100px;
+}
+
+.find-user-list .user {
+  display: flex;
+  border-bottom: 1px solid #34495e;
+  padding: 4px;
+  cursor: pointer
+}
+
+.find-user-list .user:hover { background-color: #bdc3c7; } 
+.find-user-list .user .avatar { width: 8%; }
+.find-user-list .user .avatar img { width: 100%; border-radius: 50% }
+.find-user-list .user .info { display: flex; flex-direction: column; margin-left: 8px }
+.find-user-list .user .info span { color: #34495e}
+.find-user-list .user .info span.name {font-size: 16px}
+.find-user-list .user .info span.email {font-size: 12px}
