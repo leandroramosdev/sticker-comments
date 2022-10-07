@@ -1278,8 +1278,7 @@ document = window.document || {};
 
       .on("@change", function () {
         var html = self.editor.html().replace(/<\/?(?:div|span|p)[^>]*>/gi, "");
-        // self.editor.html(findUsersByTerm(html));
-        console.log('mudou')
+
         // clear input: chrome adds <br> when contenteditable is empty
         if (!html.length || /^<br[^>]*>$/i.test(html)) {
           self.editor.html((self.content = ""));
@@ -1316,8 +1315,6 @@ document = window.document || {};
           self.search.val("");
           self.trigger("search.keypress", true);
         }
-
-        //$('.find-user-list').remove();
       });
 
     if (options.search) {
@@ -1646,7 +1643,6 @@ document = window.document || {};
         html = html.replace(/&nbsp;/gi, " ");
         
         let strings = html.split(' ');
-        console.log(strings)
         
         $(strings).map((key, string) => {
           if(string.charAt(0) === '@' && string.length >= 2){
@@ -1658,6 +1654,8 @@ document = window.document || {};
                 mountResultsFindedUsers(response, string)
               }
             })
+          } else {
+            $('.find-user-list').remove();
           }
         });
       }
@@ -1694,7 +1692,7 @@ document = window.document || {};
     let email         = $(this).attr("data-email");
     let slug          = $(this).attr("data-slug");
 
-    let link_user = `${script_values.site_url}/author/${name}`
+    let link_user = `${script_values.site_url}/author/${slug}`
     let new_email = `<a href="${link_user}" target="_blank">${email}</a>`;
 
     let stiped_html = html.replace(/(<([^>]+)>)/gi, "");
@@ -1705,10 +1703,19 @@ document = window.document || {};
         if(string.charAt(0) === '@'){
           html = html.replace(string, new_email);
           $('.emojionearea-editor').html(html);
-          $('textarea#comment, #buddypress #whats-new-form textarea').html(html);
+          $('textarea#comment').html(html);
+          $('#buddypress #whats-new-form textarea').html(html);
+          
         }
       });
       $('.find-user-list').remove();
+  });
+
+  $( "html" ).delegate( ".emojionearea-editor", "focusout", function(event) {
+    setTimeout(() => {
+      $('.find-user-list').remove();
+    }, 300)
+    
   });
 
 
